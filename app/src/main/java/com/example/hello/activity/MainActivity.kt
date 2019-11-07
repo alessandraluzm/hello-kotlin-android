@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.hello.R
 
@@ -20,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         list.adapter = adapter
-        adapter.data = mutableListOf("Fifo", "Pitchulo", "Pitchula")
+        adapter.data = mutableListOf(Tarefa("Tarefa 01"))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
 
         // Cria a interação de incluir a nova tarefa
         builder.setPositiveButton(android.R.string.ok) { _, _ ->
-            val tarefa = tarefaInput.text.toString()
-            if (!tarefa.isBlank()) {
-                adapter.data.plusAssign(tarefa)
-                Snackbar.make(coordinator, "Tarefa \"%s\" foi incluída".format(tarefa), Snackbar.LENGTH_LONG).show()
+            val nomeTarefa = tarefaInput.text.toString()
+            if (!nomeTarefa.isBlank()) {
+                adapter.data.plusAssign(Tarefa(nomeTarefa))
+                Snackbar.make(coordinator, "Tarefa \"%s\" foi incluída".format(nomeTarefa), Snackbar.LENGTH_LONG).show()
             } else {
                 Snackbar.make(coordinator, "Nenhuma tarefa foi incluída", Snackbar.LENGTH_SHORT).show()
             }

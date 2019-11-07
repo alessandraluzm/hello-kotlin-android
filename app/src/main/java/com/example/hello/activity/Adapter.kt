@@ -2,15 +2,14 @@ package com.example.hello.activity
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hello.R
+import com.example.hello.databinding.TextItemViewBinding
 
-class Adapter: RecyclerView.Adapter<TextItemViewHolder>(){
+class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     // Lista de itens que vão aparecer na tela
-    var data = mutableListOf<String>()
+    var data = mutableListOf<Tarefa>()
         // Notifica quando há alterações nos itens
-        set (value) {
+        set(value) {
             field = value
             notifyDataSetChanged()
         }
@@ -19,15 +18,30 @@ class Adapter: RecyclerView.Adapter<TextItemViewHolder>(){
     override fun getItemCount() = data.size
 
     // Preenche o conteúdo de cada posição que pode ser reciclada
-    override fun onBindViewHolder(holder: TextItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.textView.text = item
+        holder.bind(item)
     }
 
     // Prepara um item que será reciclado
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.text_item_view, parent,false) as TextView
-        return TextItemViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.from(parent)
+    }
+
+    class ViewHolder private constructor(val binding: TextItemViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: Tarefa) {
+            binding.tarefa = item
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = TextItemViewBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
+            }
+        }
     }
 }
