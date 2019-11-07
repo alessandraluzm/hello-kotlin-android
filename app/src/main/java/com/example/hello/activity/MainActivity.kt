@@ -8,9 +8,10 @@ import android.view.MenuItem
 import com.example.hello.R
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
-
+    // Cria e prepara a tela e seu conteúdo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,6 +21,10 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+        var adapter = Adapter()
+        list.adapter = adapter
+        adapter.data = listOf("Fifo", "Pitchulo", "Pitchula")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
