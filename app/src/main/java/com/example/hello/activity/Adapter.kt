@@ -8,7 +8,7 @@ import com.example.hello.R
 
 class Adapter: RecyclerView.Adapter<TextItemViewHolder>(){
     // Lista de itens que vão aparecer na tela
-    var data = listOf<String>()
+    var data = mutableListOf<String>()
         // Notifica quando há alterações nos itens
         set (value) {
             field = value

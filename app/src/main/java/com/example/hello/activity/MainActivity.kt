@@ -5,12 +5,17 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.hello.R
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
+    var adapter = Adapter()
+
     // Cria e prepara a tela e seu conteúdo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +23,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            incluirTarefa()
         }
 
-        var adapter = Adapter()
         list.adapter = adapter
-        adapter.data = listOf("Fifo", "Pitchulo", "Pitchula")
+        adapter.data = mutableListOf("Fifo", "Pitchulo", "Pitchula")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -41,5 +44,30 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    // Cria dialog para inclusão de tarefas
+    fun incluirTarefa() {
+        // Inicializa o dialog
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Nova Tarefa")
+
+        // Cria o campo de texto que é usado no dialog
+        val view = layoutInflater.inflate(R.layout.dialog_input, null)
+        val tarefaInput = view.findViewById(R.id.tarefaInput) as EditText
+        builder.setView(view)
+
+        // Cria a interação de incluir a nova tarefa
+        builder.setPositiveButton(android.R.string.ok) { _, _ ->
+            val tarefa = tarefaInput.text.toString()
+            if (!tarefa.isBlank()) {
+                adapter.data.plusAssign(tarefa)
+                Snackbar.make(coordinator, "Tarefa \"%s\" foi incluída".format(tarefa), Snackbar.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(coordinator, "Nenhuma tarefa foi incluída", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.show()
     }
 }
