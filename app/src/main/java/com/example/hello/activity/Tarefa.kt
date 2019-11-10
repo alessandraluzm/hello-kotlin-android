@@ -1,5 +1,5 @@
 package com.example.hello.activity
 
-data class Tarefa (
+data class Tarefa(
     var nome: String
 )

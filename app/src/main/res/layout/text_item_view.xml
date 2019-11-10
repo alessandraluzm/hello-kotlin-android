@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="tarefa"
             type="com.example.hello.activity.Tarefa" />
+
+        <variable
+            name="clickListener"
+            type="com.example.hello.activity.TarefaListener" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageButton
+            android:id="@+id/concluir"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:onClick="@{() -> clickListener.onClick(tarefa)}"
+            android:src="@drawable/ic_check"/>
+
         <TextView
+            android:id="@+id/nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/concluir"
+            android:layout_toLeftOf="@id/concluir"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@{tarefa.nome}"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            tools:text="Nome da Tarefa Nome da Tarefa Nome da Tarefa Nome da Tarefa" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </layout>
