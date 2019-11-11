@@ -15,6 +15,9 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    // Identifica a persistência da lista de tarefas
+    val TAREFAS_PERSIST = "TAREFAS_PERSIST"
+
     var adapter: Adapter? = null
 
     // Cria e prepara a tela e seu conteúdo
@@ -24,16 +27,24 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             incluirTarefa()
         }
 
+        // Lista de tarefas da persistência
+        val tarefas = Persistencia.carregarTarefas(TAREFAS_PERSIST, applicationContext)
+
+
         // Ao criar o adapter precisa dar o comportamento da função de clique no item da lista
         adapter = Adapter(TarefaListener { tarefa ->
+
             // Implementa o que acontece ao clicar no item da lista
             // Remove o item da lista
             adapter!!.listaTarefas.remove(tarefa)
+            // Salva a lista após excluir item
+            Persistencia.salvarTarefas(TAREFAS_PERSIST, adapter!!.listaTarefas, applicationContext)
             adapter!!.notifyDataSetChanged()
+
             // Confirma a remoção na tela
             Snackbar.make(
                 coordinator,
@@ -43,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         })
         list.adapter = adapter
         // Operador de validação de não nulo que só executa se a variável não for nula
-        adapter!!.listaTarefas = mutableListOf(Tarefa("Tarefa 01"))
+        adapter!!.listaTarefas = tarefas
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -86,7 +97,10 @@ class MainActivity : AppCompatActivity() {
                 // Inclui uma nova terefa na lista que está no adapter
                 // Validação de não nulo para o adapter
                 adapter!!.listaTarefas.plusAssign(Tarefa(nomeTarefa))
+                // Salva a lista após incluir item
+                Persistencia.salvarTarefas(TAREFAS_PERSIST, adapter!!.listaTarefas, applicationContext)
                 adapter!!.notifyDataSetChanged()
+
                 // Confirma a inclusão na tela
                 Snackbar.make(
                     coordinator,
